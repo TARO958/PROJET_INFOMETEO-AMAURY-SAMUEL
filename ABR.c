@@ -2,8 +2,10 @@
 #include <stdio.h> 
 #include "ABR.h"
 
-
-printf("je suis le boss ");
+int main(){
+    printf("je suis le boss ");
+    return 0;
+}
 
 
 
