@@ -6,4 +6,4 @@ ABR.o : ABR.c
 	gcc -o ABR.o -c ABR.c
 
 test-makefile.o : test-makefile.c
-	gcc -o test-makefile.o -c player.c
+	gcc -o test-makefile.o -c test-makefile.c
