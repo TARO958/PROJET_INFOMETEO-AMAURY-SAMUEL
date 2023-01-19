@@ -1,4 +1,4 @@
-    #include "AVL.h"
+    #include "arbre.h"
 
     #define MALLOC(x) ((x*) malloc(sizeof(x)))
 

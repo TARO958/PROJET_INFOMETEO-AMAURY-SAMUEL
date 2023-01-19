@@ -1,3 +1,6 @@
+#ifdef ARBRE_H
+#define ARBRE_H
+
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
@@ -15,7 +18,14 @@
         int height;
         struct nodetype* left;
         struct nodetype* right;
-    } Node;
+    }Node;
 
 // redifinition du pointeur
     typedef Node* pNode;
+
+
+
+ pNode insert_element(pNode root,int data);
+ bool search(pNode root, int data);
+#endif 
+
