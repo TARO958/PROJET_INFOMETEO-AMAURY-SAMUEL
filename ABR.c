@@ -1,51 +1,71 @@
 #include <stdlib.h>
 #include <stdio.h> 
 #include "arbre.h"
+#include <stdbool.h>
 
 
-int main(){
-    printf("je suis le boss ");
-    
-    return 0;
+
+//fonction qui creer un arbre 
+PNode creerArbre(int e){
+    PNode a;
+    a = (PNode) malloc(sizeof(PNode));
+    a->data = e;
+    a->left = NULL;
+    a->right = NULL;
+    a->height = 0;
+    return a;
 }
-
-
-
 //fonction permetttant d'insérer un élément dans l'arbre, et qui renvoie l'arbre modifié
- pNode insert_element(pNode root,int data){
-    if (root == NULL ){
-        root =(pNode) malloc(sizeof(pNode));
-        root->data = data;
-        root->left = NULL;
-        root->right = NULL;
-        return root;
+ PNode insert_element(PNode a,int e){
+    if (a == NULL ){
+        a =(PNode) malloc(sizeof(PNode));
+        a->data = e;
+        a->left = NULL;
+        a->right = NULL;
+        return a;
     }
-    if (data < root->data) {
-        root->left = insert_element(root->left, data);
-    } else if (data > root->data) {
-        root->right = insert_element(root->right, data);
+    if (e < a->data) {
+        a->left = insert_element(a->left, e);
+    } else if (e > a->data) {
+        a->right = insert_element(a->right, e);
     }
-    return root;
+    return a;
  }
 
 //fonction de recherche qui prend en entrée une valeur et renvoie un bool en indiquant si la valeur existe dans l'arbre binaire de recherche valide 
-bool search(pNode root, int data) {
-    if (root == NULL) {
+bool search(PNode a, int e) {
+    if (a == NULL) {
         return false;
     }
-    if (root->data == data) {
+    if (a->data == e) {
         return true;
     }
-    if (data < root->data) {
-        return search(root->left, data);
+    if (e < a->data) {
+        return search(a->left, e);
     } else {
-        return search(root->right, data);
+        return search(a->right, e);
     }
 }
 
+//fonction permettant d'afficher l'arbre (pas totalement fonctionel plus pour tester simplement )
+void affiche_arbre(PNode a){
+    if (a == NULL){
+        printf("arbre manquant");
+    }
+    printf("%d ",a->data);
+    affiche_arbre(a->left);
+    affiche_arbre(a->right);
+}
 
+int main(){
+    printf("je suis le boss ");
+    PNode a = creerArbre(12); 
+    affiche_arbre(a);
+    a= insert_element(a,13);
+    affiche_arbre(a);
+    a = insert_element(a,15);
+    printf("Pre ordre arbre :");
+    affiche_arbre(a);
 
-
-
-
-
+    return 0;
+}
