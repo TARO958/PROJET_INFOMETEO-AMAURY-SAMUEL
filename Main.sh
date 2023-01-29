@@ -1,79 +1,241 @@
 #!/bin/bash
 
-arg1=$1
-Arg_Obligatoire=false
 
-if [ -z "$arg1" ] 
-then 
-    echo "erreur pas d'argument obligatoire"
-    exit 1
+# # #     VARIABLE     # # #
+
+Arg_Obligatoire=false
+Arg_Tri=false
+file=""
+Lieux=false
+#file="meteo_filtered_data_v1.csv"
+
+######################################################
+# PROGRAM CONFORT                                    #
+VerifTmp="tmp.csv"                                   #
+                                                     #
+if [ $VerifTmp ]                                     #
+then                                                 #
+     rm "tmp.csv"                                    #
+     #rm -r ~/.local/share/Trash/*                   #
+     #echo "!!! tmp has been remove !!!"              #
+fi                                                   #
+# TROFNOC MARGORP                                    #
+######################################################
+
+
+### Usage ###
+
+usage() {
+  echo "Utilisation : nom_script.sh [-f|--fichier nom_fichier.csv] [-t|--temperature MODE] [-w|--vent] [-p|--pression MODE] [-m|--humidité] [-h|--altitude]"
+  echo "  -f : fichier de donnée meteo"
+  echo "  -t : Affiche les données sur la temperature"
+  echo "  -p : Affiche les données sur la pression"
+  echo "  -w : Affiche les données sur le vent"
+  echo "  -m : Affiche les données sur l'humidité"
+  echo "  -h : Affiche les données sur l'altitude"
+}
+
+if [ -z "$1" ]; then
+     echo "  taper --help pour voir le manuel"
+     exit 1
 fi
 
-echo "Argument inscrit : $*"
+if [ "$1" == "--help" ]; then
+  usage
+  exit 0
+fi
+
+### ----- ###
 
 
-for arg in "$@"
-do
 
-    case "$arg" in
-        "-t") echo "Il manque le mode à l'argument -t"
-              exit 1
-        ;; 
-        "-t1") Arg_Obligatoire=true 
-             echo "VALIDE"
-             break
-        ;;
-        "-t2") Arg_Obligatoire=true 
-             echo "VALIDE"
-             break
-        ;;
-        "-t3") Arg_Obligatoire=true 
-             echo "VALIDE"
-             break
-        ;;
-        "-p") echo "Il manque le mode à l'argument -p"
-              exit 1
-        ;;
-        "-p1") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        "-p2") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        "-p3") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        "-w") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        "-m") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        "-h") Arg_Obligatoire=true
-             echo "VALIDE"
-             break
-        ;;
-        *) echo "Erreur l'argument $arg n'existe pas"
-           break
-        ;;  
-    esac
+### MSG ERREUR ###
 
+triVerifINF() {
+     if [ "$Arg_Tri" == true ]; then
+          echo "  Il y'a plusieurs argument de tri." >&2
+          exit 1
+     fi
+}
+
+triverifSUP() {
+     if [ "$Arg_Tri" == false ]; then
+          echo "  Il manque un argument de tri." >&2
+          exit 1
+     fi
+}
+
+ObligatoirVerif() {
+     if [ $Arg_Obligatoire == false ]; then 
+          echo "  Il n'a pas de type de données demander." >&2
+          exit 1
+     fi
+}
+
+LieuxVerif() {
+     if [ "$Lieux" == false ]; then
+          echo "  Il manque un lieu en argument." >&2
+          exit 1
+     fi
+}
+
+### --- ------ ###
+
+
+
+### Options ###
+
+OPTIONS=$(getopt -o f:t1:t2:t3:p1:p2:p3:w:m:h:F:G:S:A:O:Q:d: --long tab:,abr:,avl: -- "$@")
+
+eval set -- "$OPTIONS"
+
+while true; do
+     case $1 in
+     -f)
+          file="$2"
+               if [[ $file != *.csv ]]; then
+               echo "Le fichier doit être un fichier .csv" >&2
+               exit 1
+          fi
+          shift 2
+          ;;
+     -t1)
+          temperature1=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -t2)
+          #temperature2=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -t3)
+          #temperature3=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -p1)
+          #pression1=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -p2)
+          #pression2=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -p3)
+          #pression3=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -w)
+          #vent=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -m)
+          #humidité=true  
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -h)
+          #altitude=true
+          Arg_Obligatoire=true
+          shift 
+          ;;
+     -F)
+          #France=true
+          Lieux=true
+          shift 
+          ;;
+     -G)
+          #Guyane=true
+          Lieux=true
+          shift 
+          ;;
+     -S)
+          #StMic=true
+          Lieux=true
+          shift 
+          ;;
+     -A)
+          #Antilles=true
+          Lieux=true
+          shift 
+          ;;
+     -O)
+          #OceanIndien=true
+          Lieux=true
+          shift 
+          ;;
+     -Q)
+          #Antartique=true
+          Lieux=true
+          shift 
+          ;;
+     -d)
+          #DateMin=$2
+          #DateMax=$3
+          #date=true
+          shift 3
+          ;;
+     --tab)
+          triVerifINF
+          #tab=true
+          Arg_Tri=true
+          shift 
+          ;;
+     --abr)
+          triVerifINF
+          #altitude=true
+          Arg_Tri=true
+          shift 
+          ;;
+     --avl)
+          triVerifINF
+          #altitude=true
+          Arg_Tri=true
+          shift 
+          ;;
+     --)
+          shift
+          break
+          ;;
+     *)
+          echo "Erreur : option non prise en charge : $1" >&2
+          exit 1
+          ;;
+     esac
 done
 
-# Verification argument 
-if [ $Arg_Obligatoire == true ]
-then 
-    echo "Bool true"
-else 
-    exit 1
+ObligatoirVerif
+LieuxVerif
+triverifSUP
+
+### ------- ###
+
+
+
+# echo "Argument inscrit : $*"
+
+
+
+###  Verification argument  ###
+
+echo "  Arguments understood"
+
+#tri pour la temperature
+if [ "$temperature1" == true ]
+then
+     # cut -d';' -f1 $file > tmp.csv
+     awk -F ";" '{print $0,$10,$11,$12}' "$file" >> tmp.csv
+     echo "    DONE"
 fi
 
-echo "toujours là"
+
+
+
 
 ################ BROUILLON ####################
 
