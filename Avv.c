@@ -1,12 +1,13 @@
-    #include "arbre.h"
-    #include <stdlib.h>
-    #include <stdio.h>
-    #include <stdbool.h>
+#include "arbre.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 
     
     /*-------------------- Fonctions ----------------------*/
 
-    // crée un noeud
+    //crée un noeud
+    
     
     
 

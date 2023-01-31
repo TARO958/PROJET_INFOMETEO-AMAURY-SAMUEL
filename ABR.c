@@ -6,7 +6,7 @@
 
 
 //fonction qui creer un arbre 
-PNode creerArbre(int e){
+PNode creer_Arbre(int e){
     PNode a;
     a = (PNode) malloc(sizeof(PNode));
     a->data = e;
@@ -22,6 +22,7 @@ PNode creerArbre(int e){
         a->data = e;
         a->left = NULL;
         a->right = NULL;
+        a->balance = 0;
         return a;
     }
     if (e < a->data) {
@@ -48,7 +49,7 @@ bool search(PNode a, int e) {
 }
 
 //fonction permettant d'afficher l'arbre (pas totalement fonctionel plus pour tester simplement )
-void affiche_arbre(PNode a){
+void tree_display(PNode a){
     if (a == NULL){
         printf("arbre manquant");
     }

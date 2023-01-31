@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "AVL.C": "cpp"
+        "AVL.C": "cpp",
+        "file.h": "c",
+        "stdio.h": "c"
     }
 }

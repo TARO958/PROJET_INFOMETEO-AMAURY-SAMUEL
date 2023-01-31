@@ -15,9 +15,9 @@
 // structure AVL
 typedef struct nodetype {
     int data;
-    int height;
     struct nodetype* left;
     struct nodetype* right;
+    int balance;
 }Node,*PNode;
 
 // redifinition du pointeur
@@ -25,7 +25,9 @@ typedef struct nodetype {
 
 
 
-PNode insert_element(PNode root,int data);
- bool search(PNode root, int data);
+PNode insert_element(PNode a,int data);
+bool search(PNode root, int data);
+PNode tree_display(PNode a);
+Pnode creer_Arbre(int e);
 #endif 
 
