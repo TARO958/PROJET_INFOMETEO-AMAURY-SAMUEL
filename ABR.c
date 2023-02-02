@@ -10,8 +10,8 @@ PNode creer_Arbre(int e){
     PNode a;
     a = (PNode) malloc(sizeof(PNode));
     a->data = e;
-    a->left = NULL;
-    a->right = NULL;
+    a->fleft = NULL;
+    a->fright = NULL;
     a->balance = 0;
     return a;
 }
@@ -21,15 +21,15 @@ PNode creer_Arbre(int e){
     if (a == NULL ){
         a =(PNode) malloc(sizeof(PNode));
         a->data = e;
-        a->left = NULL;
-        a->right = NULL;
+        a->fleft = NULL;
+        a->fright = NULL;
         a->balance = 0;
         return a;
     }
     if (e < a->data) {
-        a->left = insert_element(a->left, e);
+        a->left = insert_element(a->fleft, e);
     } else if (e > a->data) {
-        a->right = insert_element(a->right, e);
+        a->right = insert_element(a->fright, e);
     }
     return a;
  }
@@ -43,9 +43,9 @@ bool search(PNode a, int e) {
         return true;
     }
     if (e < a->data) {
-        return search(a->left, e);
+        return search(a->fleft, e);
     } else {
-        return search(a->right, e);
+        return search(a->fright, e);
     }
 }
 
@@ -55,8 +55,8 @@ void tree_display(PNode a){
         printf("arbre manquant");
     }
     printf("%d ",a->data);
-    tree_display(a->left);
-    tree_display(a->right);
+    tree_display(a->fleft);
+    tree_display(a->fright);
 }
 
 

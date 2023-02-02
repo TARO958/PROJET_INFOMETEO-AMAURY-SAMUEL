@@ -15,8 +15,8 @@
 // structure AVL
 typedef struct nodetype {
     int data;
-    struct nodetype* left;
-    struct nodetype* right;
+    struct nodetype* fleft;
+    struct nodetype* fright;
     int balance;
 }Node,*PNode;
 
