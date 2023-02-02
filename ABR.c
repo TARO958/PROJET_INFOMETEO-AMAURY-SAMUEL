@@ -12,9 +12,10 @@ PNode creer_Arbre(int e){
     a->data = e;
     a->left = NULL;
     a->right = NULL;
-    a->height = 0;
+    a->balance = 0;
     return a;
 }
+
 //fonction permetttant d'insérer un élément dans l'arbre, et qui renvoie l'arbre modifié
  PNode insert_element(PNode a,int e){
     if (a == NULL ){
@@ -54,19 +55,41 @@ void tree_display(PNode a){
         printf("arbre manquant");
     }
     printf("%d ",a->data);
-    affiche_arbre(a->left);
-    affiche_arbre(a->right);
+    tree_display(a->left);
+    tree_display(a->right);
 }
+
+
+
+
+
+
 
 int main(){
     printf("je suis le boss ");
-    PNode a = creerArbre(12); 
-    affiche_arbre(a);
+    PNode a = creer_Arbre(12); 
+    tree_display(a);
     a= insert_element(a,13);
-    affiche_arbre(a);
+    tree_display(a);
     a = insert_element(a,15);
     printf("Pre ordre arbre :");
-    affiche_arbre(a);
+    tree_display(a);
+
+
+
+
+ //----lire ligne par ligne le fichier csv extraire les différrentes valeurs pour les trier grace au diiférentes méthodes------//
+    FILE *fp;
+    char line[100];
+
+    fp = fopen("tmp.csv","r");
+    if(fp == NULL){
+        printf("Error: unable to open the file.\n");
+        return 1;
+    }
+    while(fgets(line,100,fp)!= NULL){
+        printf("Line: %s",line);
+    }
 
     return 0;
 }

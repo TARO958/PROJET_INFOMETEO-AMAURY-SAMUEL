@@ -21,18 +21,4 @@ void sort_csv_file(const char *filename){
 
 }
 
-  // Lire chaque ligne dans le fichier CSV
-   char line[1024];
- while (fgets(line, 1024, fp) != NULL) {
-    // Séparer les champs de la ligne en utilisant la virgule comme séparateur
-    char *field = strtok(line, ",");
-    int key = atoi(field);
-    field = strtok(NULL, ",");
-    char *value = field;
 
-    // Ajouter l'enregistrement à l'arbre AVL
-    record_t *record = (record_t *)malloc(sizeof(record_t));
-    record->key = key;
-    strcpy(record->value, value);
-    avl_insert(tree, record);
-  }

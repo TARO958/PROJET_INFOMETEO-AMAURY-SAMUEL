@@ -27,7 +27,8 @@ typedef struct nodetype {
 
 PNode insert_element(PNode a,int data);
 bool search(PNode root, int data);
-PNode tree_display(PNode a);
-Pnode creer_Arbre(int e);
+void tree_display(PNode a);
+PNode creer_Arbre(int e);
+
 #endif 
 
