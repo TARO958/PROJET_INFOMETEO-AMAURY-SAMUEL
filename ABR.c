@@ -61,10 +61,6 @@ void tree_display(PNode a){
 
 
 
-
-
-
-
 int main(){
     printf("je suis le boss ");
     PNode a = creer_Arbre(12); 
