@@ -2,97 +2,149 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
+#include <time.h>
 
     
-    /*-------------------- Fonctions ----------------------*/
-//crée un noeud
-// return la hauteur
-// equilibre un noeud
-// met a jour le noeud
-tation gauche
-PNode LeftRotate(PNode a){
-    PNode pivot;
-    pivot = a->fright;
-    a->fright = pivot->fright;
-    pivot->fright = a;
-    a = pivot;
-    return  a;
+    /*------------------- Fonctions ----------------------*/
+int height(PNode node) {
+  if (node == NULL) return 0;
+  return node->height; 
 }
-// rotation droite
-PNode RightRotate(PNode a){
-    PNode pivot;
-    pivot = a->fleft;
-    a->fleft = pivot->fright;
-    pivot->fright = a;
-    a = pivot;
-    return a;
-}    
-// double rotation droite
-PNode DoubleRightRotate(PNode a){
-    a->fleft = LeftRotate(a->fleft);
-    return RightRotate(a);
+
+
+
+
+PNode leftRotate(PNode x) {
+  PNode y = x->fright;
+  PNode T2 = y->fleft;
+  y->fleft = x;
+  x->fright = T2;
+  x->height = max(height(x->fleft), height(x->fright)) + 1;
+  y->height = max(height(y->fleft), height(y->fright)) + 1;
+  return y;
 }
-// double rotation gauche
-PNode DoubleleftRotate(PNode a){
-    a->fright = RightRotate(a->fright);
-    return LeftRotate(a);
+PNode rightRotate(PNode y) {
+  PNode x = y->fleft;
+  PNode T2 = x->fright;
+  x->fright = y;
+  y->fleft = T2;
+  y->height = max(height(y->fleft), height(y->fright)) + 1;
+  x->height = max(height(x->fleft), height(x->fright)) + 1;
+  return x;
 }
+int max(int a, int b) {
+  return (a > b) ? a : b;
+}
+
+int height(PNode node) {
+  if (node == NULL) return 0;
+  return node->height; 
+}
+
+int getBalance(PNode node) {
+  if (node == NULL) return 0;
+  return height(node->fleft) - height(node->fright);
+}
+
+
 // insere un noeud
-   PNode insertion_AVL(PNode a,int e,int *h){
-    if(a == NULL){
-        *h = 1;
-        return creer_Arbre(e);
-    }
-    else if(a->data<e){
-        a->fleft = insertion_AVL(a->fright,&e,h);
-        *h = -*h;
 
+   
+PNode creer_AVL(int e,int var,float data){
+    PNode newnode = malloc(sizeof(PNode));
+    if (newnode == NULL){
+        exit(1);
     }
-    else if(a->data >e){
-        a->fright = insertion_AVL(a->fleft,&e,h);
-    }
-    else{
-        *h = 0;
-        return a;
-    }
-    if(*h!=0){
-        a->balance = a->balance + *h;
-        if(a->balance == 0){
-            *h = 0;
-        }
-        else {
-            *h =1;
-        }
-    }
-    return a;
-   }
-// MAJ équilibre de l'arbre
-PNode balance_AVL(PNode a){
-    if(a->balance >= 2){
-        if(a->fright->balance >= 0 ){
-            return LeftRotate(a);
-        }
-        else{
-            return DoubleleftRotate;
-        }
-    }
-    if(a->balance <= 2){
-        if(a->fleft->balance <= 0){
-            return RightRotate(a);
-        }
-        else{
-            return DoubleRightRotate(a);
-        }
-    }
-    return a;
-}
+    newnode->data = data;
+    newnode->height = -1;
+    newnode->fright = NULL;
+    newnode->fleft = NULL;
+    newnode->id = e;
+    newnode->date = var;
+    return newnode;
     
+}
 
-// parcours préfixe (affichage temporaire)
+
+PNode sort_AVL(PNode a,int e,int var,float data){
+    if(a == NULL){
+        return creer_AVL(e,var,data);
+    }
+    if(a->id <= e){
+        a->fright = sort_AVL(a->fright,e,var,data);
+    }
+    if(a->id > e ){
+        a->fleft = sort_AVL(a->fleft,e,var,data);
+    }
+    a->height = 1 + max(height(a->fleft), height(a->fright));
+    int balance = getBalance(a);
+
+     if (balance > 1 && data < a->fleft->data)
+        return rightRotate(a);
+    if (balance < -1 && data > a->fright->data)
+        return leftRotate(a);
+    if (balance > 1 && data > a->fleft->data) {
+        a->fleft = leftRotate(a->fleft);
+        return rightRotate(a);
+    }
+    if (balance < -1 && data < a->fright->data) {
+        a->fright = rightRotate(a->fright);
+        return leftRotate(a);
+    }
+     return a;
+
+}
+void inorder(PNode a) 
+{   
+    if (a != NULL) 
+    { 
+        inorder(a->fleft); 
+              fprintf(fp,"%d %d %f\n", a->id, a->date, a->data);
+        inorder(a->fright); 
+    } 
+}
+
+// MAJ équilibre de l'arbre
+
+
     
 
 /*--------------------------------- MAIN ------------------------------------*/
 
 int main() {
-      
+     FILE *fp;
+    PNode Avl = NULL;
+    int id;
+    char date[100];
+    float data;
+
+
+    fp = fopen("tmp.csv","r");
+    if(fp == NULL){
+        printf("Error: unable to open the file.\n");
+        return 1;
+    }
+    while((fscanf(fp,"%d %s %f\n", &id, date, &data)) != EOF){
+        date[19] = '\0';
+            struct tm tm;
+            time_t date;
+            if(strptime(date, "%d/%m/%Y %H:%M:%S", &tm) != NULL){
+                date = mktime(&tm);
+            }
+        Avl = sort_AVL(Avl, id, date, data);
+         
+        
+    }
+    fclose(fp);
+    fp = fopen("fichier_trié.csv", "w");
+    if(fp == NULL){
+        printf("Error: unable to open the file.\n");
+        return 1;
+    }
+    inorder(Avl);
+     
+    return 0;
 }
+      
+

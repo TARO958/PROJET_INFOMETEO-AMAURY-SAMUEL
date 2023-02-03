@@ -14,10 +14,13 @@
 
 // structure AVL
 typedef struct nodetype {
-    int data;
+    float data;
     struct nodetype* fleft;
     struct nodetype* fright;
-    int balance;
+    int height;
+    int id;
+    int date;
+    
 }Node,*PNode;
 
 // redifinition du pointeur
@@ -29,6 +32,7 @@ PNode insert_element(PNode a,int data);
 bool search(PNode root, int data);
 void tree_display(PNode a);
 PNode creer_Arbre(int e);
+
 
 #endif 
 
