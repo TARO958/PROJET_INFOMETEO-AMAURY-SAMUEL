@@ -1,10 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "liste.h"
 #include <string.h>
 #include <time.h>
 
-/*Plink create_node(int e){
+Plink create_node(float e){
     Plink a;
     a = (Plink) malloc(sizeof(Plink));
     if(a == NULL){
@@ -17,7 +16,7 @@
 
 
 
-Plink insert_node(Plink a,int e ){
+Plink insert_node(Plink a,float e ){
     Plink newnode = create_node(e);
     if(a == NULL){
         a = newnode;
@@ -31,7 +30,7 @@ Plink insert_node(Plink a,int e ){
     }
     return a;
 }
-*/
+
 
 
 Plink sortLinkList(Plink a){
@@ -62,38 +61,94 @@ Plink sortLinkList(Plink a){
 }
 
 
-int main(int argc, char **argv)
-{   
-    FILE *fp;
-    char line[100];
-    Plink a = NULL;
-    Plink sortedList = NULL;
-    Plink actual = NULL;
+Plink *insertion_sort(Plink a){
+    Plink new_a = NULL;
+    Plink actual = a;
+    Plink prev = NULL;
 
-    if(argc < 4){
-        return 1;
+    while(actual!= NULL){
+        prev = NULL;
+        Plink temp = new_a;
+        while(temp != NULL && temp->data < actual->data){
+            prev = temp;
+            temp = temp->next;
+        }
+        Plink temp2 = actual->next;
+        if(prev == NULL){
+            actual->next = new_a;
+            new_a = actual;
+        }
+        else{
+            actual->next = prev->next;
+            prev->next = actual;
+        }
+        actual = temp2;
     }
-    
-    fp = fopen(argv[1], "r");
-    if(fp == NULL){
-        printf("File %s not found\n", argv[1]);
-        return 1;
-    }
-    
-    while(fgets(line, 100, fp)!= NULL){
-        actual =(Plink)malloc(sizeof(Plink));
-        sscanf(line, "%s;%li;%f", actual->id,&actual->date, &actual->data);
-        actual->next = a;
-        a = actual;
+    return *new_a;
+}
+
+
+
+
+
+
+int main(int argc, char **argv)
+
+{   
+
+
+
+    FILE *fp = NULL;
+    Plink *head = NULL;
+
+    fp = fopen("tmp.csv", "r");
+    if(fp == NULL)
+    {
+        
+        perror("error opening file\n");
+
+    }  
+    else{
+          char line[1024];
+          
+          
+          float col = atof(argv[1]); // argument donné pour la colonne
+             while (fgets(line, 1024, fp)) {
+                char *value= strtok(line, ",");
+                Plink *a = (Plink*)malloc(sizeof(Plink));
+                for (int i = 1; i < col; i++) {
+                    value = strtok(NULL, ",");
+
+
+                }
+                (*a)->data = atof(value);
+                (*a)->next = head;
+                head = a;
+            }
+            head = insertion_sort(head);
+            Plink  *actual = head;
+            while (actual!= NULL) {
+                printf("%f\n", (*actual)->data);
+                actual = (*actual)->next;  
+                /* code */
+            }
+            
     }
     fclose(fp);
-    sortedList = sortLinkList(actual);
-    actual = sortedList;
-    while(actual != NULL){
-        printf("%s;%li;%.1f\n",actual->id,actual->date,actual->data);
-        actual = actual->next;
-    }
+   
+
+
+
+if(argc <4){
+    return 1;
+  }
+
+
+
+
     return 0;
 
 
 }
+
+

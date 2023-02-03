@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
  
 
 
@@ -11,7 +12,7 @@ typedef struct link{
 
 
 
-Plink create_chain_list(Plink a ,int element);
+
 
 
 
