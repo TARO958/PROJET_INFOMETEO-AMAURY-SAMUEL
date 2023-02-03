@@ -66,7 +66,7 @@ Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-
 - A : Displays data from the French Astral Lands
 
   ###  SORTING PARAMETERS [ NOT REQUIRED | MAXIMUM : 1 | DEFAULT : AVL ]
-- tab : Bubble sort
+- tab : Sort by chained list
 - abr : Binary tree sorting
 - avl : Sort by binary search tree
  
@@ -81,7 +81,7 @@ Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-
 - Tab.c
 - Makefile
 - ReadME.md
-- compte_rendu.pdf
+- Detail_projet.pdf
 
 ## Author
 
