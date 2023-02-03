@@ -7,7 +7,25 @@ Arg_Obligatoire=false
 Arg_Tri=false
 file=""
 Lieux=false
+
 #file="meteo_filtered_data_v1.csv"
+
+# Variable lieux :
+France=false
+Guyane=false
+StMic=false
+Antilles=false
+OceanIndien=false
+Antartique=false
+
+# Variable données :
+modeT=false
+modeP=false
+
+# Variable tris :
+tab=false
+abr=false
+avl=false
 
 ######################################################
 # PROGRAM CONFORT                                    #
@@ -16,8 +34,10 @@ VerifTmp="tmp.csv"                                   #
 if [ $VerifTmp ]                                     #
 then                                                 #
      rm "tmp.csv"                                    #
+     #rm "tmptmp.csv"                                 #
+     #rm "result.csv"                                 #
      #rm -r ~/.local/share/Trash/*                   #
-     #echo "!!! tmp has been remove !!!"              #
+     #echo "!!! tmp has been remove !!!"             #
 fi                                                   #
 # TROFNOC MARGORP                                    #
 ######################################################
@@ -73,11 +93,27 @@ ObligatoirVerif() {
 }
 
 LieuxVerif() {
-     if [ "$Lieux" == false ]; then
-          echo "  Il manque un lieu en argument." >&2
+     if [ "$Lieux" == true ]; then
+          echo "  Il y a deja une variable géographique" >&2
           exit 1
      fi
 }
+
+VerifModesP() {
+     if [ "$modeP" == true ]; then
+     echo "erreur il y a plusieurs fois la variable -P<mode>" >&2
+     exit 1
+     fi
+}
+
+
+VerifModesT() {
+     if [ "$modeT" == true ]; then
+     echo "erreur il y a plusieurs fois la variable -t<mode>" >&2
+     exit 1
+     fi
+}
+
 
 ### --- ------ ###
 
@@ -85,7 +121,7 @@ LieuxVerif() {
 
 ### Options ###
 
-OPTIONS=$(getopt -o f:t1:t2:t3:p1:p2:p3:w:m:h:F:G:S:A:O:Q:d: --long tab:,abr:,avl: -- "$@")
+OPTIONS=$(getopt -o f:t:t1:t2:t3:p:p1:p2:p3:w:m:h:F:G:S:A:O:Q:d: --long tab:,abr:,avl: -- "$@")
 
 eval set -- "$OPTIONS"
 
@@ -93,108 +129,134 @@ while true; do
      case $1 in
      -f)
           file="$2"
-               if [[ $file != *.csv ]]; then
+          if [[ $file != *.csv ]]; then
                echo "Le fichier doit être un fichier .csv" >&2
                exit 1
           fi
           shift 2
           ;;
+     -t)
+          echo "Erreur : il manque le mode associer à l'argument -t" >&2
+          exit 1
+          ;;
      -t1)
+          VerifModesT
+          modeT=true
           temperature1=true
           Arg_Obligatoire=true
           shift 
           ;;
      -t2)
-          #temperature2=true
+          VerifModesT
+          modeT=true
+          temperature2=true
           Arg_Obligatoire=true
           shift 
           ;;
      -t3)
-          #temperature3=true
+          VerifModesT
+          modeT=true
+          temperature3=true
           Arg_Obligatoire=true
           shift 
           ;;
+     -p)
+          echo "Erreur : il manque le mode associer à l'argument -p" >&2
+          exit 1
+          ;;
      -p1)
-          #pression1=true
+          VerifModesP
+          modeP=true
+          pression1=true
           Arg_Obligatoire=true
           shift 
           ;;
      -p2)
-          #pression2=true
+          VerifModesP
+          modeP=true
+          pression2=true
           Arg_Obligatoire=true
           shift 
           ;;
      -p3)
-          #pression3=true
+          VerifModesP
+          modeP=true
+          pression3=true
           Arg_Obligatoire=true
           shift 
           ;;
      -w)
-          #vent=true
+          vent=true
           Arg_Obligatoire=true
           shift 
           ;;
      -m)
-          #humidité=true  
+          humidite=true  
           Arg_Obligatoire=true
           shift 
           ;;
      -h)
-          #altitude=true
+          altitude=true
           Arg_Obligatoire=true
           shift 
           ;;
      -F)
-          #France=true
+          LieuxVerif
+          France=true
           Lieux=true
           shift 
           ;;
      -G)
-          #Guyane=true
+          LieuxVerif
+          Guyane=true
           Lieux=true
           shift 
           ;;
      -S)
-          #StMic=true
+          LieuxVerif
+          StMic=true
           Lieux=true
           shift 
           ;;
      -A)
-          #Antilles=true
+          LieuxVerif
+          Antilles=true
           Lieux=true
           shift 
           ;;
      -O)
-          #OceanIndien=true
+          LieuxVerif
+          OceanIndien=true
           Lieux=true
           shift 
           ;;
      -Q)
-          #Antartique=true
+          LieuxVerif
+          Antartique=true
           Lieux=true
           shift 
           ;;
      -d)
-          #DateMin=$2
-          #DateMax=$3
-          #date=true
+          DateMin=$2
+          DateMax=$3
+          date=true
           shift 3
           ;;
      --tab)
           triVerifINF
-          #tab=true
+          tab=true
           Arg_Tri=true
           shift 
           ;;
      --abr)
           triVerifINF
-          #altitude=true
+          abr=true
           Arg_Tri=true
           shift 
           ;;
      --avl)
           triVerifINF
-          #altitude=true
+          avl=true
           Arg_Tri=true
           shift 
           ;;
@@ -210,45 +272,227 @@ while true; do
 done
 
 ObligatoirVerif
-LieuxVerif
 triverifSUP
+
+echo -e "\n\tFiltred file underconstruction"
 
 ### ------- ###
 
 
 
-# echo "Argument inscrit : $*"
+###  Filtrage  ###
 
 
+# Géographique #
 
-###  Verification argument  ###
+if [ "$Lieux" == true ]; then
+     if [ "$Guyane" == true ]; then
+          Pattern="81408|81415|81401|81405"
+     fi
+     if [ "$StMic" == true ]; then
+          Pattern="71805"
+     fi
+     if [ "$Antilles" == true ]; then
+          Pattern="78890|78897|78922|78925|78894"
+     fi
+     if [ "$OceanIndien" == true ]; then
+          Pattern="61980|67005"
+     fi
+     if [ "$Antartique" == true ]; then
+          Pattern="61972|61976|61998"
+     fi
+     if [ "$France" == true ]; then
+          Pattern="81408|81415|81401|81405|71805|78890|78897|78897|78922|78925|78894|61980|67005|61972|61976|61998"
+     fi
+fi
 
-echo "  Arguments understood"
 
-#tri pour la temperature
-if [ "$temperature1" == true ]
-then
-     # cut -d';' -f1 $file > tmp.csv
-     awk -F ";" '{print $0,$10,$11,$12}' "$file" >> tmp.csv
-     echo "    DONE"
+# Données
+
+resetTmp() {
+     if [ -f "tmptmp.csv" ] && [ -f "result.csv" ]; then
+          rm tmptmp.csv
+          rm tmp.csv
+          mv result.csv tmp.csv
+     fi
+}
+
+     # Base
+if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $2 ";" $10 ";" $15}' >> tmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $2 ";" $10 ";" $15}' >> tmp.csv
+fi
+
+     # t1 & t2 & t3 (temperature)
+if [ "$temperature1" == true ] || [ "$temperature2" == true ] || [ "$temperature3" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $11 ";" $12 ";" $13}' >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $11 ";" $12 ";" $13}' >> tmptmp.csv
+     fi
+     join -t ";" -1 1 -2 1 tmp.csv tmptmp.csv >> result.csv
+     resetTmp
+fi
+
+     # p1 & p2 & p3 (pression)
+if [ "$pression1" == true ] || [ "$pression2" == true ] || [ "$pression3" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $3 ";" $7 ";" $8}' >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $3 ";" $7 ";" $8}' >> tmptmp.csv
+     fi
+     join -t ";" -1 1 -2 1 tmp.csv tmptmp.csv >> result.csv
+     resetTmp
+fi
+
+     # heigh
+if [ "$altitude" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $14}' >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $14}' >> tmptmp.csv
+     fi
+     join -t ";" -1 1 -2 1 tmp.csv tmptmp.csv >> result.csv
+     resetTmp
+fi      
+
+     # mud
+if [ "$humidite" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $6}' >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $6}' >> tmptmp.csv
+     fi
+     join -t ";" -1 1 -2 1 tmp.csv tmptmp.csv >> result.csv
+     resetTmp
+fi      
+
+     # wind
+if [ "$vent" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" | awk -F ";" '{print $1 ";" $4 ";" $5}' >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" | awk -F ";" '{print $1 ";" $4 ";" $5}' >> tmptmp.csv
+     fi
+     join -t ";" -1 1 -2 1 tmp.csv tmptmp.csv >> result.csv
+     resetTmp
+fi      
+
+
+# Date
+
+if [ "$date" == true ]
+     then
+     if [ "$France" == true ]; then
+          grep -E -v "^$Pattern" "$file" >> tmptmp.csv
+     else grep -E "ID|$Pattern" "$file" >> tmptmp.csv
+     fi
+fi      
+
+# # # Appel du tri # # #
+
+
+# tab
+if [ "$tab" == true ]; then
+     if [ "$temperature1" == true ]; then
+          # tri tab(1)
+     fi
+     if [ "$temperature2" == true ]; then
+          # tri tab(2)
+     fi
+     if [ "$temperature3" == true ]; then
+          # tri tab(2)
+          # tri tab(1)
+     fi
+     if [ "$pression1" == true ]; then
+          # tri tab(1)
+     fi
+     if [ "$pression2" == true ]; then
+          # tri tab(2)
+     fi
+     if [ "$pression3" == true ]; then
+          # tri tab(2)
+          # tri tab(1)
+     fi
+     if [ "$vent" == true ]; then
+          # tri tab(1)
+     fi
+     if [ "$altitude" == true ]; then
+          # tri abr(14) décroissant !
+     fi
+     if [ "$humidite" == true ]; then
+          # tri abr(6) décroissant !
+     fi
+fi
+
+# abr
+if [ "$tab" == true ]; then
+     if [ "$temperature1" == true ]; then
+          # tri abr(1)
+     fi
+     if [ "$temperature2" == true ]; then
+          # tri abr(2)
+     fi
+     if [ "$temperature3" == true ]; then
+          # tri abr(2)
+          # tri abr(1)
+     fi
+     if [ "$pression1" == true ]; then
+          # tri abr(1)
+     fi
+     if [ "$pression2" == true ]; then
+          # tri abr(2)
+     fi
+     if [ "$pression3" == true ]; then
+          # tri abr(2)
+          # tri abr(1)
+     fi
+     if [ "$vent" == true ]; then
+          # tri abr(1)
+     fi
+     if [ "$altitude" == true ]; then
+          # tri abr(14) décroissant !
+     fi
+     if [ "$humidite" == true ]; then
+          # tri abr(6) décroissant !
+     fi
+fi
+
+#avl
+if [ "$avl" == true ] || ([ "$abr" == false ] && [ "$avl" == false ]); then
+     if [ "$temperature1" == true ]; then
+          # tri avl(1)
+     fi
+     if [ "$temperature2" == true ]; then
+          # tri avl(2)
+     fi
+     if [ "$temperature3" == true ]; then
+          # tri avl(2)
+          # tri avl(1)
+     fi
+     if [ "$pression1" == true ]; then
+          # tri avl(1)
+     fi
+     if [ "$pression2" == true ]; then
+          # tri avl(2)
+     fi
+     if [ "$pression3" == true ]; then
+          # tri avl(2)
+          # tri avl(1)
+     fi
+     if [ "$vent" == true ]; then
+          # tri avl(1)
+     fi
+     if [ "$altitude" == true ]; then
+          # tri abr(14) décroissant !
+     fi
+     if [ "$humidite" == true ]; then
+          # tri abr(6) décroissant !
+     fi
 fi
 
 
 
+echo -e "\n\t\tDONE\n"
 
-
-################ BROUILLON ####################
-
-
-# [ $# -ge i ]; vérifie si l'argument "i" existe par comparaison des nombre d'arguments
-
-
-# "t") cut -d';' -f11 meteo_filtered_data_v1.csv # mode 1, 2, 3
-
-# "p") cut -d';' -f3 meteo_filtered_data_v1.csv # mode 1, 2, 3
-            
-# "w") cut -d';' -f4 meteo_filtered_data_v1.csv
-            
-# "m") cut -d';' -f6 meteo_filtered_data_v1.csv # décroissant
-            
-# "h") cut -d';' -f14 meteo_filtered_data_v1.csv # décroissant
+return 0
