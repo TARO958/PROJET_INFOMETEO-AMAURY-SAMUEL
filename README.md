@@ -31,20 +31,18 @@ It will result in different schemes adapted to the user's request
 
 - Step 3 )  run the program with the execution command 'main.sh
 
-'''
 
     ./Main.sh
 
-'''
 
 ## Usage
 
 Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --
 
-  ###   PARAMETER FILE [ REQUIRED | MAXIMUM : 1]
+  ###  PARAMETER FILE [ REQUIRED | MAXIMUM : 1]
 - f : weather data file, a csv file
 
-  ###   DATA PARAMETER [ REQUIRED | NO LIMIT ]
+  ###  DATA PARAMETER [ REQUIRED | NO LIMIT ]
 - t(mode) : Display temperature data, 3 modes available, one mode is required
     - t1) sort by station ID
     - t2) sort by chronological order of data
@@ -57,7 +55,7 @@ Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-
 - m : Displays humidity data
 - h : Displays altitude data
 
-###    GEOGRAPHICAL PARAMETER [ NOT REQUIRED | MAXIMUM : 1]
+  ###  GEOGRAPHICAL PARAMETER [ NOT REQUIRED | MAXIMUM : 1]
 - F : Displays data from France and Corsica
 - G : Displays data from Guyana
 - A : Displays data from West Indies
