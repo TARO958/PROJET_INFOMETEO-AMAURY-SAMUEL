@@ -1,14 +1,25 @@
-all : prog
+all: exec
 
+main.o: main.c
+	gcc -c main.c -o main.o
 
-prog : ABR.o test-makefile.o
-	gcc -o prog ABR.o test-makefile.o
+# Compilation
 
+ABR.o: ABR.c ABR.h
+	gcc -c ABR.c -o ABR.o
 
-ABR.o : ABR.c
-	gcc -o ABR.o -c ABR.c
+AVL.o: AVL.c AVL.h
+	gcc -c AVL.c -o AVL.o
 
-test-makefile.o : test-makefile.c
-	gcc -o test-makefile.o -c test-makefile.c
+TAB.o: TAB.c TAB.h
+	gcc -c TAB.c -o TAB.o
 
+exec: main.o AVL.o ABR.o TAB.o
+	gcc main.o AVL.o ABR.o TAB.o -o exec
+
+# supprime les fichier objet
+clean:
+	rm -f *.o exec
+
+	
 

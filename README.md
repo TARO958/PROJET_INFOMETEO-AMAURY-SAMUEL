@@ -15,26 +15,20 @@ It will result in different schemes adapted to the user's request
 
 - Step 1 )  access the folder containing the files with the 'cd' command
 
-'''
-
+''' 
     cd path/to/your/project/directory
-    
 '''
 
 - Step 2 )  execute the makefile with the 'make' command
 
 ''' 
-
     make
-    
 '''
 
 - Step 3 )  run the program with the execution command 'main.sh
 
 '''
-
     ./Main.sh
-    
 '''
 
 ## Usage
@@ -66,7 +60,7 @@ Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-
 - A : Displays data from the French Astral Lands
 
   ###  SORTING PARAMETERS [ NOT REQUIRED | MAXIMUM : 1 | DEFAULT : AVL ]
-- tab : Sort by chained list
+- tab : Bubble sort
 - abr : Binary tree sorting
 - avl : Sort by binary search tree
  
@@ -81,7 +75,7 @@ Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-
 - Tab.c
 - Makefile
 - ReadME.md
-- Detail_projet.pdf
+- compte_rendu.pdf
 
 ## Author
 
