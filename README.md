@@ -15,7 +15,7 @@ It will result in different schemes adapted to the user's request
 
 - Step 1 )  access the folder containing the files with the 'cd' command
 
-''' bash 
+''' 
 
     cd path/to/your/project/directory
 
@@ -23,7 +23,7 @@ It will result in different schemes adapted to the user's request
 
 - Step 2 )  execute the makefile with the 'make' command
 
-''' bash 
+''' 
 
     make
 
@@ -31,7 +31,7 @@ It will result in different schemes adapted to the user's request
 
 - Step 3 )  run the program with the execution command 'main.sh
 
-''' bash
+'''
 
     ./Main.sh
 
@@ -39,7 +39,7 @@ It will result in different schemes adapted to the user's request
 
 ## Usage
 
-##### Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --
+Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --
 
   ###   PARAMETER FILE [ REQUIRED | MAXIMUM : 1]
 - f : weather data file, a csv file
