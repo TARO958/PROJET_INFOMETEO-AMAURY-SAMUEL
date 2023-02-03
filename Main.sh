@@ -7,8 +7,7 @@ Arg_Obligatoire=false
 Arg_Tri=false
 file=""
 Lieux=false
-
-#file="meteo_filtered_data_v1.csv"
+fileHere=false
 
 # Variable lieux :
 France=false
@@ -34,8 +33,8 @@ VerifTmp="tmp.csv"                                   #
 if [ $VerifTmp ]                                     #
 then                                                 #
      rm "tmp.csv"                                    #
-     #rm "tmptmp.csv"                                 #
-     #rm "result.csv"                                 #
+     #rm "tmptmp.csv"                                #
+     #rm "result.csv"                                #
      #rm -r ~/.local/share/Trash/*                   #
      #echo "!!! tmp has been remove !!!"             #
 fi                                                   #
@@ -46,13 +45,42 @@ fi                                                   #
 ### Usage ###
 
 usage() {
-  echo "Utilisation : nom_script.sh [-f|--fichier nom_fichier.csv] [-t|--temperature MODE] [-w|--vent] [-p|--pression MODE] [-m|--humidité] [-h|--altitude]"
-  echo "  -f : fichier de donnée meteo"
-  echo "  -t : Affiche les données sur la temperature"
-  echo "  -p : Affiche les données sur la pression"
+  echo -e "\n"
+  echo " Ce programme permet un filtrage,tris et affichage sous forme de graphique des données météo"
+  echo -e "\n"
+  echo "  Exemple utilisation : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --"
+  echo -e "\n"
+  echo "        PARAMETRE FICHIER [ OBLIGATOIRE | MAXIMUM : 1]"
+  echo "  -f : fichier de donnée meteo, un fichier format csv"
+  echo -e "\n"
+  echo "        PARAMETRE DONNES [ OBLIGATOIRE | PAS DE LIMITE ]"
+  echo "  -t<mode> : Affiche les données sur la temperature, 3 modes disponible, un mode est necessaire"
+  echo "       -t1) tri en focntion des ID des stations"
+  echo "       -t2) tri en focntion de l'ordre chronologique des données"
+  echo "       -t3) tri en focntion de l'ordre chronologique puis des données"
+  echo "  -p<mode> : Affiche les données sur la pression, 3 modes disponible, un mode est necessaire"
+  echo "       -p1) tri en focntion des ID des stations"
+  echo "       -p2) tri en focntion de l'ordre chronologique des données"
+  echo "       -p3) tri en focntion de l'ordre chronologique puis des données"
   echo "  -w : Affiche les données sur le vent"
   echo "  -m : Affiche les données sur l'humidité"
   echo "  -h : Affiche les données sur l'altitude"
+  echo -e "\n"
+  echo "       PARAMETRE GEOGRAPHIQUE [ PAS OBLIGATOIRE | MAXIMUM : 1]"
+  echo "   -F : Affiche les données de la France metropolitaine ainsi que la Corse"
+  echo "   -G : Affiche les données de la Guyane"
+  echo "   -A : Affiche les données des Antilles"
+  echo "   -O : Affiche les données des territoires français present dans l'Océan Indien"
+  echo "   -S : Affiche les données de Saint Pierre et Miquelon"
+  echo "   -A : Affiche les données des terres Astrales française"
+  echo -e "\n"
+  echo "       PARAMETRE TRIS [ PAS OBLIGATOIRE | MAXIMUM : 1 | DEFAULT : AVL ]"
+  echo "   --tab : Tri à bulles"
+  echo "   --abr : Tri par arbre binaire"
+  echo "   --avl : Tri par arbre binaire de recherche"
+  echo -e "\n"   
+  echo "   Veuillez conclure votre commande avec : --"
+  echo -e "\n"   
 }
 
 if [ -z "$1" ]; then
@@ -71,6 +99,13 @@ fi
 
 ### MSG ERREUR ###
 
+VerifFile() {
+     if [ "$fileHere" == false ]; then
+          echo "  Il n'y a pas de fichier .csv rentrer" >&2
+          exit 1
+     fi
+}
+
 triVerifINF() {
      if [ "$Arg_Tri" == true ]; then
           echo "  Il y'a plusieurs argument de tri." >&2
@@ -80,8 +115,7 @@ triVerifINF() {
 
 triverifSUP() {
      if [ "$Arg_Tri" == false ]; then
-          echo "  Il manque un argument de tri." >&2
-          exit 1
+          avl=true
      fi
 }
 
@@ -133,6 +167,7 @@ while true; do
                echo "Le fichier doit être un fichier .csv" >&2
                exit 1
           fi
+          fileHere=true
           shift 2
           ;;
      -t)
@@ -273,6 +308,7 @@ done
 
 ObligatoirVerif
 triverifSUP
+VerifFile
 
 echo -e "\n\tFiltred file underconstruction"
 
@@ -280,7 +316,7 @@ echo -e "\n\tFiltred file underconstruction"
 
 
 
-###  Filtrage  ###
+# # #  Filtrage  # # #
 
 
 # Géographique #
@@ -395,7 +431,7 @@ fi
 # tab
 if [ "$tab" == true ]; then
      if [ "$temperature1" == true ]; then
-          # tri tab(1)
+          # tri tab(1) tmp.csv
      fi
      if [ "$temperature2" == true ]; then
           # tri tab(2)

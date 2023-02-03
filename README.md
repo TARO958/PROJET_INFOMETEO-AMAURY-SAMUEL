@@ -7,20 +7,25 @@ It will result in different schemes adapted to the user's request
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Creator](#Creator)
+- [Realisation](#Realisation)
+- [Author](#author)
 
 ## Installation
 
+
+
 ## Usage
 
-## Creator
+## Realisation
+
+## Author
 
 ### Samuel Zerrouk
-- email :
+- email : zerrouksam@cy-tech.fr
 
 ### Amaury Provent 
-- email : 
+- email : proventama@cy-tech.fr
 
-PréING 2 MI Groupe 4
+#### PréING 2 MI Groupe 4
 
 ![logo CyTech](https://upload.wikimedia.org/wikipedia/commons/4/4a/CY_Tech.png)
