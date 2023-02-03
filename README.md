@@ -39,7 +39,7 @@ It will result in different schemes adapted to the user's request
 
 ## Usage
 
-### Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --
+##### Example usage : nom_script.sh [-f nom_fichier.csv] [-t<mode>] [-w] [-p<mode>] [-m] [-h] [-G] [--abr] --
 
   ###   PARAMETER FILE [ REQUIRED | MAXIMUM : 1]
 - f : weather data file, a csv file
